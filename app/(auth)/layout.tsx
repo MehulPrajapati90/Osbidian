@@ -1,4 +1,4 @@
-import { requireUnAuth } from '@/actions/auth';
+import { requireUnAuth } from '@/actions/user';
 import React from 'react'
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
