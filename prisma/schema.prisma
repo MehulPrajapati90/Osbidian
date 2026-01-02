@@ -7,16 +7,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  username      String?   @unique
-  emailVerified Boolean   @default(false)
+  username      String?    @unique
+  emailVerified Boolean    @default(false)
+  roomId        String?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   sessions      Session[]
   accounts      Account[]
+  chatRooms     ChatRoom[]
 
   @@unique([email])
   @@map("user")
@@ -68,4 +70,19 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model ChatRoom {
+  id        String  @id @default(uuid())
+  title     String?
+  roomId    String
+  isActive  Boolean @default(false)
+  ttl       Int
+  maxMember Int
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

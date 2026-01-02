@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import QueryProvider from "@/components/query-client";
 import "./globals.css";
+import Provider from "@/components/provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,13 +25,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <QueryProvider>
+      <Provider>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {children}
         </body>
-      </QueryProvider>
+      </Provider>
     </html>
   );
 }
