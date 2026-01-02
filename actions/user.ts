@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation"
 import client from "@/lib/db";
+import { userAgent } from "next/server";
 
 export const requireAuth = async () => {
     const session = await auth.api.getSession({
@@ -55,6 +56,39 @@ export const currentUser = async () => {
         }
     }
 };
+
+export const currentDbUser = async() => {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+
+        if (!session?.user) {
+            return {
+                success: false,
+                error: "User UnAuthenticated"
+            }
+        }
+
+        const dbUser = await client.user.findFirst({
+            where: {
+                id: session.user?.id
+            },
+        })
+
+        return {
+            success: true,
+            message: "User Authenticated",
+            user: dbUser,
+        }
+    } catch (e) {
+        console.error(e);
+        return {
+            success: false,
+            error: "User UnAuthenticated or internal server error"
+        }
+    }
+}
 
 export const checkUsername = async ({ username }: CheckUsernameType) => {
     const { user } = await currentUser();
